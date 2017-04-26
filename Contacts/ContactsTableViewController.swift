@@ -13,17 +13,24 @@ class ContactsTableViewController: UITableViewController {
     var contacts: [Contact] = []
     
     override func viewDidLoad() {
-        let jenny = Contact(phoneNumber: "867-5309")
+        let jenny = Contact(name: "Jenny",phoneNumber: "867-5309")
         let rich = Contact(name: "Rich", phoneNumber: "888-888-8888")
-        let mindy = Contact(name: "Mindy")
+        let mindy = Contact(name: "Mindy", phoneNumber: "510-433-5198")
+        let brian = Contact(name: "Brian", phoneNumber: "408-423-8532")
         
         self.contacts.append(jenny)
         self.contacts.append(rich)
         self.contacts.append(mindy)
+        self.contacts.append(brian)
         
         let moveButton = UIBarButtonItem(barButtonSystemItem: .edit, target: self, action: #selector(ContactsTableViewController.toggleEdit))
         
         navigationItem.leftBarButtonItem = moveButton
+        
+        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(ContactsTableViewController.addContact))
+        
+        navigationItem.rightBarButtonItem = addButton
+        
         
             
         // Uncomment the following line to preserve selection between presentations
@@ -40,7 +47,13 @@ class ContactsTableViewController: UITableViewController {
     func toggleEdit() {
         tableView.setEditing(!tableView.isEditing, animated: true)
     }
-
+    
+    func addContact() {
+        let newContact = Contact(name: "New Contact")
+        self.contacts.append(newContact)
+        let newIndexPath = IndexPath(row: self.contacts.count - 1, section: 0)
+        self.tableView.insertRows(at: [newIndexPath], with: .automatic)
+    }
     // MARK: - Table view data source
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -89,6 +102,10 @@ class ContactsTableViewController: UITableViewController {
         let contactMoving = contacts.remove(at: fromIndexPath.row)
         contacts.insert(contactMoving, at: to.row)
 
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tableView.reloadData()
     }
  
 
